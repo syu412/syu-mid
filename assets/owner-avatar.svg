@@ -1,0 +1,12 @@
+<svg width="480" height="560" viewBox="0 0 480 560" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="480" height="560" rx="48" fill="#F7E9D7"/>
+  <rect x="28" y="28" width="424" height="504" rx="36" fill="#FFF8EF" stroke="#D55D3F" stroke-width="4"/>
+  <circle cx="240" cy="188" r="108" fill="#F6C38B"/>
+  <path d="M146 195C146 127.621 200.621 73 268 73C323.228 73 369.891 109.688 383 158.934C367.215 131.769 337.839 113.5 304.195 113.5C256.633 113.5 215.612 150.028 202.731 196.608L193.771 229H157.093C149.695 218.547 146 207.05 146 195Z" fill="#3B2A24"/>
+  <circle cx="202" cy="191" r="12" fill="#3B2A24"/>
+  <circle cx="287" cy="191" r="12" fill="#3B2A24"/>
+  <path d="M209 244C218.631 258.282 233.801 267 250.272 267C266.744 267 281.914 258.282 291.544 244" stroke="#B54A2C" stroke-width="8" stroke-linecap="round"/>
+  <path d="M126 456C126 378.68 188.68 316 266 316H275C352.32 316 415 378.68 415 456V478H126V456Z" fill="#D55D3F"/>
+  <path d="M118 474C118 397.785 179.785 336 256 336C332.215 336 394 397.785 394 474V478H118V474Z" fill="#224A3D"/>
+  <text x="240" y="520" text-anchor="middle" fill="#D55D3F" font-size="34" font-family="Georgia, serif">網站主人</text>
+</svg>

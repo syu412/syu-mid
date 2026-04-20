@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>會員註冊 | 個人網站與訪客留言板</title>
+    <meta
+      name="description"
+      content="個人網站的獨立會員註冊頁面，支援帳號建立、密碼設定與 jpg/png 頭貼上傳。"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body data-page="register" data-auth-redirect="index.html#guestbook">
+    <div class="page-shell">
+      <header class="topbar">
+        <div class="topbar-inner">
+          <div class="brand">
+            <span class="brand-mark">Portfolio Site</span>
+            <strong class="brand-title">個人網站與訪客互動系統</strong>
+          </div>
+          <nav class="nav" aria-label="主要導覽">
+            <a class="nav-link" href="index.html">HOME</a>
+            <a class="nav-link" href="index.html#about">ABOUT</a>
+            <a class="nav-link" href="index.html#guestbook">MESSAGES</a>
+            <a class="nav-link" href="login.html">LOGIN</a>
+            <a class="nav-link active" href="register.html">REGISTER</a>
+          </nav>
+        </div>
+      </header>
+
+      <main class="auth-main">
+        <section class="auth-shell">
+          <div class="page-card split-copy">
+            <span class="page-tag">REGISTER</span>
+            <h1>獨立註冊頁面</h1>
+            <p class="page-lead">
+              在這裡建立你的訪客帳號、設定密碼並上傳個人頭貼。完成註冊後系統會自動登入，並帶你回首頁留言板。
+            </p>
+
+            <div class="status-bar auth-status-bar">
+              <div class="mini-user">
+                <img id="current-user-avatar" src="assets/owner-avatar.svg" alt="目前使用者頭貼" />
+                <div>
+                  <strong id="current-user-name">訪客模式</strong>
+                  <p class="helper">目前登入狀態</p>
+                </div>
+              </div>
+              <div class="status-actions">
+                <div class="status-pill" id="status-text">尚未登入。</div>
+                <button class="button button-secondary hidden" id="logout-button" type="button">
+                  登出
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <section class="page-card auth-page-card">
+            <h2>建立新帳號</h2>
+            <p class="section-copy">
+              註冊時必須上傳一張 jpg、jpeg 或 png 頭貼，帳號資料會保存在瀏覽器資料庫中。
+            </p>
+
+            <form id="register-form" class="form-grid auth-page-form">
+              <div class="field">
+                <label for="register-username">帳號名稱</label>
+                <input
+                  id="register-username"
+                  class="input"
+                  name="username"
+                  type="text"
+                  minlength="3"
+                  maxlength="20"
+                  placeholder="至少 3 個字元"
+                  required
+                />
+              </div>
+
+              <div class="field">
+                <label for="register-password">登入密碼</label>
+                <input
+                  id="register-password"
+                  class="input"
+                  name="password"
+                  type="password"
+                  minlength="6"
+                  maxlength="32"
+                  placeholder="至少 6 個字元"
+                  required
+                />
+              </div>
+
+              <div class="field">
+                <label for="register-avatar">訪客頭貼</label>
+                <input
+                  id="register-avatar"
+                  class="file-input"
+                  name="avatar"
+                  type="file"
+                  accept=".jpg,.jpeg,.png,image/jpeg,image/png"
+                  required
+                />
+                <p class="helper">只接受 jpg、jpeg 或 png。</p>
+              </div>
+
+              <button class="button button-primary" type="submit">完成註冊</button>
+            </form>
+
+            <p class="helper auth-switch">
+              已經有帳號？
+              <a class="inline-link" href="login.html">前往登入頁</a>
+            </p>
+          </section>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <div class="footer-card">
+          本網站示範個人網站、會員註冊登入、頭貼上傳與留言板整合功能。
+          <br />
+          <span id="current-year"></span> Personal Portfolio Assignment Demo
+        </div>
+      </footer>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="app.js" defer></script>
+  </body>
+</html>

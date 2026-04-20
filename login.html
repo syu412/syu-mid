@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>會員登入 | 個人網站與訪客留言板</title>
+    <meta
+      name="description"
+      content="個人網站的獨立會員登入頁面，登入後可回到留言板進行互動。"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body data-page="login" data-auth-redirect="index.html#guestbook">
+    <div class="page-shell">
+      <header class="topbar">
+        <div class="topbar-inner">
+          <div class="brand">
+            <span class="brand-mark">Portfolio Site</span>
+            <strong class="brand-title">個人網站與訪客互動系統</strong>
+          </div>
+          <nav class="nav" aria-label="主要導覽">
+            <a class="nav-link" href="index.html">HOME</a>
+            <a class="nav-link" href="index.html#about">ABOUT</a>
+            <a class="nav-link" href="index.html#guestbook">MESSAGES</a>
+            <a class="nav-link active" href="login.html">LOGIN</a>
+            <a class="nav-link" href="register.html">REGISTER</a>
+          </nav>
+        </div>
+      </header>
+
+      <main class="auth-main">
+        <section class="auth-shell">
+          <div class="page-card split-copy">
+            <span class="page-tag">LOGIN</span>
+            <h1>獨立登入頁面</h1>
+            <p class="page-lead">
+              已經註冊完成的訪客可以在這裡登入。登入成功後，系統會保留登入狀態並導回首頁留言板。
+            </p>
+
+            <div class="status-bar auth-status-bar">
+              <div class="mini-user">
+                <img id="current-user-avatar" src="assets/owner-avatar.svg" alt="目前使用者頭貼" />
+                <div>
+                  <strong id="current-user-name">訪客模式</strong>
+                  <p class="helper">目前登入狀態</p>
+                </div>
+              </div>
+              <div class="status-actions">
+                <div class="status-pill" id="status-text">尚未登入。</div>
+                <button class="button button-secondary hidden" id="logout-button" type="button">
+                  登出
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <section class="page-card auth-page-card">
+            <h2>會員登入</h2>
+            <p class="section-copy">
+              輸入已註冊的帳號與密碼即可登入。若還沒有帳號，可直接前往註冊頁面建立。
+            </p>
+
+            <form id="login-form" class="form-grid auth-page-form">
+              <div class="field">
+                <label for="login-username">帳號名稱</label>
+                <input
+                  id="login-username"
+                  class="input"
+                  name="username"
+                  type="text"
+                  placeholder="輸入已註冊帳號"
+                  required
+                />
+              </div>
+
+              <div class="field">
+                <label for="login-password">登入密碼</label>
+                <input
+                  id="login-password"
+                  class="input"
+                  name="password"
+                  type="password"
+                  placeholder="輸入你的密碼"
+                  required
+                />
+              </div>
+
+              <button class="button button-primary" type="submit">登入帳號</button>
+            </form>
+
+            <p class="helper auth-switch">
+              還沒有帳號？
+              <a class="inline-link" href="register.html">前往註冊頁</a>
+            </p>
+          </section>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <div class="footer-card">
+          本網站示範個人網站、會員註冊登入、頭貼上傳與留言板整合功能。
+          <br />
+          <span id="current-year"></span> Personal Portfolio Assignment Demo
+        </div>
+      </footer>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="app.js" defer></script>
+  </body>
+</html>

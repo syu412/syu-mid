@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="包含網站主人頭像、自我介紹、註冊登入、頭貼上傳與留言板功能的個人網站作品。"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body data-page="home">
+    <div class="page-shell">
+      <header class="topbar">
+        <div class="topbar-inner">
+          <div class="brand">
+            <span class="brand-mark">Portfolio Site</span>
+            <strong class="brand-title">個人網站與訪客互動系統</strong>
+          </div>
+          <nav class="nav" aria-label="主要導覽">
+            <a class="nav-link active" href="index.html">HOME</a>
+            <a class="nav-link" href="index.html#about">ABOUT</a>
+            <a class="nav-link" href="index.html#guestbook">MESSAGES</a>
+            <a class="nav-link" href="login.html">LOGIN</a>
+            <a class="nav-link" href="register.html">REGISTER</a>
+          </nav>
+        </div>
+      </header>
+
+      <main>
+        <section class="hero">
+          <div class="hero-copy">
+            <span class="eyebrow">網站頁面設計必須包含主人頭貼與自我介紹</span>
+            <h1>
+              歡迎來到我的
+              <span>個人網站</span>
+            </h1>
+            <p class="hero-text">
+              這個作品把作業要求整合成一個完整的個人網站：首頁展示網站主人的頭貼與介紹，登入與註冊改為獨立頁面，留言板則保留在首頁供會員互動使用。
+            </p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="register.html">前往註冊頁</a>
+              <a class="button button-secondary" href="login.html">前往登入頁</a>
+              <a class="button button-secondary" href="#guestbook">直接看留言板</a>
+            </div>
+          </div>
+
+          <aside class="hero-card" aria-label="網站主人資訊摘要">
+            <div class="hero-portrait">
+              <img src="assets/owner-avatar.svg" alt="網站主人的示意頭像" />
+            </div>
+            <div class="hero-meta">
+              <div>
+                <strong>網站主人</strong>
+                <span>王小明 / 資訊設計學生</span>
+              </div>
+              <div>
+                <strong>網站主題</strong>
+                <span>自我介紹與訪客互動</span>
+              </div>
+            </div>
+          </aside>
+        </section>
+
+        <section class="content-grid">
+          <div class="stack">
+            <section class="panel about-layout" id="about">
+              <div>
+                <h2>網站主人自我介紹</h2>
+                <p class="section-copy">
+                  大家好，我是王小明，目前專注在前端互動設計與網頁應用開發。我喜歡把介面做得不只「能用」，還要清楚、有層次，也能讓使用者一眼理解功能流程。這個網站以作業需求為核心，示範了會員註冊、登入驗證、頭貼上傳與留言板整合，讓頁面兼具展示與互動用途。
+                </p>
+              </div>
+
+              <div class="fact-grid">
+                <article class="fact-card">
+                  <strong>01</strong>
+                  <span>以個人品牌感視覺呈現網站主人的頭像與介紹。</span>
+                </article>
+                <article class="fact-card">
+                  <strong>02</strong>
+                  <span>提供訪客完整註冊、登入與頭貼上傳流程。</span>
+                </article>
+                <article class="fact-card">
+                  <strong>03</strong>
+                  <span>讓登入會員可留言，並刪除自己留下的內容。</span>
+                </article>
+              </div>
+            </section>
+
+            <section class="panel">
+              <h2>本網站已對應的作業要求</h2>
+              <div class="requirement-list">
+                <article class="requirement-item">
+                  <span class="requirement-num">1</span>
+                  <div>
+                    <strong>網站主人個人頭貼</strong>
+                    <p>首頁右側以明顯視覺區塊呈現網站主人的頭貼與身分摘要。</p>
+                  </div>
+                </article>
+                <article class="requirement-item">
+                  <span class="requirement-num">2</span>
+                  <div>
+                    <strong>網站主人自我介紹</strong>
+                    <p>首頁中段提供完整個人簡介，說明背景、興趣與網站用途。</p>
+                  </div>
+                </article>
+                <article class="requirement-item">
+                  <span class="requirement-num">3</span>
+                  <div>
+                    <strong>註冊、登入與資料儲存</strong>
+                    <p>訪客可建立帳號、密碼與頭貼資料，並在重新開啟頁面後保留資料。</p>
+                  </div>
+                </article>
+                <article class="requirement-item">
+                  <span class="requirement-num">4</span>
+                  <div>
+                    <strong>頭貼上傳限制 jpg / png</strong>
+                    <p>註冊時只接受 jpg、jpeg、png 圖片格式，其他格式會被擋下。</p>
+                  </div>
+                </article>
+                <article class="requirement-item">
+                  <span class="requirement-num">5</span>
+                  <div>
+                    <strong>留言板含頭貼與刪除自己留言</strong>
+                    <p>每則留言左側都會顯示留言者頭貼，且只有留言本人能刪除自己的留言。</p>
+                  </div>
+                </article>
+              </div>
+            </section>
+          </div>
+
+          <div class="stack">
+            <section class="panel" id="auth">
+              <h2>會員入口</h2>
+              <p class="section-copy">
+                註冊與登入已拆成獨立頁面，讓流程更清楚，也更符合一般網站的操作方式。註冊時需上傳 jpg 或 png 頭貼，登入成功後即可回到首頁留言。
+              </p>
+
+              <div class="portal-grid">
+                <article class="portal-card">
+                  <span class="page-tag">REGISTER</span>
+                  <h3>獨立註冊頁面</h3>
+                  <p class="auth-note">
+                    建立訪客帳號、密碼與頭貼資料，完成後會自動登入並返回留言板。
+                  </p>
+                  <a class="button button-primary" href="register.html">前往註冊</a>
+                </article>
+
+                <article class="portal-card">
+                  <span class="page-tag">LOGIN</span>
+                  <h3>獨立登入頁面</h3>
+                  <p class="auth-note">
+                    已註冊的訪客可直接進入登入頁，成功登入後即可留言與管理自己的留言。
+                  </p>
+                  <a class="button button-secondary" href="login.html">前往登入</a>
+                </article>
+              </div>
+            </section>
+
+            <section class="panel" id="guestbook">
+              <h2>會員留言板</h2>
+              <p class="section-copy">
+                只有已註冊並登入的訪客可以留言。留言區左側會顯示使用者頭貼，並且留言本人可刪除自己的內容。
+              </p>
+
+              <div class="stack">
+                <div class="status-bar">
+                  <div class="status-pill" id="status-text">尚未登入，請先註冊或登入後才可留言。</div>
+                  <div class="status-actions">
+                    <button class="button button-secondary hidden" id="logout-button" type="button">
+                      登出
+                    </button>
+                    <button class="button button-primary" id="jump-composer-button" type="button">
+                      前往留言
+                    </button>
+                  </div>
+                </div>
+
+                <section class="message-compose" id="message-composer">
+                  <div class="compose-header">
+                    <div class="mini-user">
+                      <img id="current-user-avatar" src="assets/owner-avatar.svg" alt="目前使用者頭貼" />
+                      <div>
+                        <strong id="current-user-name">訪客模式</strong>
+                        <p class="helper" id="guest-hint">請先完成註冊或登入。</p>
+                      </div>
+                    </div>
+                    <div class="helper" id="composer-guard">登入後即可開始留言。</div>
+                  </div>
+
+                  <form id="message-form" class="form-grid">
+                    <div class="field">
+                      <label for="message-input">留言內容</label>
+                      <textarea
+                        id="message-input"
+                        class="textarea"
+                        name="message"
+                        maxlength="300"
+                        placeholder="登入後寫下你的想法或回饋..."
+                        disabled
+                        required
+                      ></textarea>
+                    </div>
+
+                    <button class="button button-primary" type="submit">送出留言</button>
+                  </form>
+                </section>
+
+                <section class="message-list" aria-live="polite">
+                  <h3>最新留言</h3>
+                  <div id="message-list"></div>
+                </section>
+              </div>
+            </section>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <div class="footer-card">
+          本網站示範個人網站、會員註冊登入、頭貼上傳與留言板整合功能。
+          <br />
+          <span id="current-year"></span> Personal Portfolio Assignment Demo
+        </div>
+      </footer>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="app.js" defer></script>
+  </body>
+</html>
