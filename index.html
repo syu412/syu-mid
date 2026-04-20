@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>個人網站與訪客留言板</title>
     <meta
       name="description"
       content="包含網站主人頭像、自我介紹、註冊登入、頭貼上傳與留言板功能的個人網站作品。"
@@ -36,7 +37,6 @@
       <main>
         <section class="hero">
           <div class="hero-copy">
-            <span class="eyebrow">網站頁面設計必須包含主人頭貼與自我介紹</span>
             <h1>
               歡迎來到我的
               <span>個人網站</span>
@@ -94,75 +94,11 @@
               </div>
             </section>
 
-            <section class="panel">
-              <h2>本網站已對應的作業要求</h2>
-              <div class="requirement-list">
-                <article class="requirement-item">
-                  <span class="requirement-num">1</span>
-                  <div>
-                    <strong>網站主人個人頭貼</strong>
-                    <p>首頁右側以明顯視覺區塊呈現網站主人的頭貼與身分摘要。</p>
-                  </div>
-                </article>
-                <article class="requirement-item">
-                  <span class="requirement-num">2</span>
-                  <div>
-                    <strong>網站主人自我介紹</strong>
-                    <p>首頁中段提供完整個人簡介，說明背景、興趣與網站用途。</p>
-                  </div>
-                </article>
-                <article class="requirement-item">
-                  <span class="requirement-num">3</span>
-                  <div>
-                    <strong>註冊、登入與資料儲存</strong>
-                    <p>訪客可建立帳號、密碼與頭貼資料，並在重新開啟頁面後保留資料。</p>
-                  </div>
-                </article>
-                <article class="requirement-item">
-                  <span class="requirement-num">4</span>
-                  <div>
-                    <strong>頭貼上傳限制 jpg / png</strong>
-                    <p>註冊時只接受 jpg、jpeg、png 圖片格式，其他格式會被擋下。</p>
-                  </div>
-                </article>
-                <article class="requirement-item">
-                  <span class="requirement-num">5</span>
-                  <div>
-                    <strong>留言板含頭貼與刪除自己留言</strong>
-                    <p>每則留言左側都會顯示留言者頭貼，且只有留言本人能刪除自己的留言。</p>
-                  </div>
-                </article>
-              </div>
-            </section>
+
           </div>
 
           <div class="stack">
-            <section class="panel" id="auth">
-              <h2>會員入口</h2>
-              <p class="section-copy">
-                註冊與登入已拆成獨立頁面，讓流程更清楚，也更符合一般網站的操作方式。註冊時需上傳 jpg 或 png 頭貼，登入成功後即可回到首頁留言。
-              </p>
-
-              <div class="portal-grid">
-                <article class="portal-card">
-                  <span class="page-tag">REGISTER</span>
-                  <h3>獨立註冊頁面</h3>
-                  <p class="auth-note">
-                    建立訪客帳號、密碼與頭貼資料，完成後會自動登入並返回留言板。
-                  </p>
-                  <a class="button button-primary" href="register.html">前往註冊</a>
-                </article>
-
-                <article class="portal-card">
-                  <span class="page-tag">LOGIN</span>
-                  <h3>獨立登入頁面</h3>
-                  <p class="auth-note">
-                    已註冊的訪客可直接進入登入頁，成功登入後即可留言與管理自己的留言。
-                  </p>
-                  <a class="button button-secondary" href="login.html">前往登入</a>
-                </article>
-              </div>
-            </section>
+            
 
             <section class="panel" id="guestbook">
               <h2>會員留言板</h2>
@@ -225,8 +161,6 @@
 
       <footer class="footer">
         <div class="footer-card">
-          本網站示範個人網站、會員註冊登入、頭貼上傳與留言板整合功能。
-          <br />
           <span id="current-year"></span> Personal Portfolio Assignment Demo
         </div>
       </footer>

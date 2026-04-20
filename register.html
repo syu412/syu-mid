@@ -36,34 +36,11 @@
 
       <main class="auth-main">
         <section class="auth-shell">
-          <div class="page-card split-copy">
-            <span class="page-tag">REGISTER</span>
-            <h1>獨立註冊頁面</h1>
-            <p class="page-lead">
-              在這裡建立你的訪客帳號、設定密碼並上傳個人頭貼。完成註冊後系統會自動登入，並帶你回首頁留言板。
-            </p>
-
-            <div class="status-bar auth-status-bar">
-              <div class="mini-user">
-                <img id="current-user-avatar" src="assets/owner-avatar.svg" alt="目前使用者頭貼" />
-                <div>
-                  <strong id="current-user-name">訪客模式</strong>
-                  <p class="helper">目前登入狀態</p>
-                </div>
-              </div>
-              <div class="status-actions">
-                <div class="status-pill" id="status-text">尚未登入。</div>
-                <button class="button button-secondary hidden" id="logout-button" type="button">
-                  登出
-                </button>
-              </div>
-            </div>
-          </div>
 
           <section class="page-card auth-page-card">
             <h2>建立新帳號</h2>
             <p class="section-copy">
-              註冊時必須上傳一張 jpg、jpeg 或 png 頭貼，帳號資料會保存在瀏覽器資料庫中。
+              註冊時必須上傳一張 jpg、jpeg 或 png 頭貼，帳號與頭貼資料會寫入雲端資料庫，之後可跨裝置登入。
             </p>
 
             <form id="register-form" class="form-grid auth-page-form">
@@ -121,8 +98,6 @@
 
       <footer class="footer">
         <div class="footer-card">
-          本網站示範個人網站、會員註冊登入、頭貼上傳與留言板整合功能。
-          <br />
           <span id="current-year"></span> Personal Portfolio Assignment Demo
         </div>
       </footer>

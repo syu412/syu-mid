@@ -37,19 +37,11 @@
       <main class="auth-main">
         <section class="auth-shell">
           <div class="page-card split-copy">
-            <span class="page-tag">LOGIN</span>
-            <h1>獨立登入頁面</h1>
-            <p class="page-lead">
-              已經註冊完成的訪客可以在這裡登入。登入成功後，系統會保留登入狀態並導回首頁留言板。
-            </p>
 
             <div class="status-bar auth-status-bar">
               <div class="mini-user">
                 <img id="current-user-avatar" src="assets/owner-avatar.svg" alt="目前使用者頭貼" />
-                <div>
-                  <strong id="current-user-name">訪客模式</strong>
-                  <p class="helper">目前登入狀態</p>
-                </div>
+
               </div>
               <div class="status-actions">
                 <div class="status-pill" id="status-text">尚未登入。</div>
@@ -63,7 +55,7 @@
           <section class="page-card auth-page-card">
             <h2>會員登入</h2>
             <p class="section-copy">
-              輸入已註冊的帳號與密碼即可登入。若還沒有帳號，可直接前往註冊頁面建立。
+              輸入已註冊的帳號與密碼即可登入。登入驗證由伺服器處理，若還沒有帳號，可直接前往註冊頁面建立。
             </p>
 
             <form id="login-form" class="form-grid auth-page-form">
@@ -104,8 +96,7 @@
 
       <footer class="footer">
         <div class="footer-card">
-          本網站示範個人網站、會員註冊登入、頭貼上傳與留言板整合功能。
-          <br />
+
           <span id="current-year"></span> Personal Portfolio Assignment Demo
         </div>
       </footer>

@@ -1,9 +1,3 @@
-const DB_NAME = "portfolio-guestbook-db";
-const DB_VERSION = 1;
-const USER_STORE = "users";
-const MESSAGE_STORE = "messages";
-const SESSION_KEY = "portfolio-session-user";
-
 const defaultAvatar =
   "data:image/svg+xml;utf8," +
   encodeURIComponent(`
@@ -15,8 +9,8 @@ const defaultAvatar =
   `);
 
 const state = {
-  db: null,
   currentUser: null,
+  messages: [],
   toastTimer: null,
 };
 
@@ -24,12 +18,15 @@ let elements = {};
 
 document.addEventListener("DOMContentLoaded", () => {
   elements = collectElements();
+
   if (elements.currentYear) {
     elements.currentYear.textContent = String(new Date().getFullYear());
   }
+
+  bindEvents();
   bootstrap().catch((error) => {
     console.error(error);
-    showToast("初始化失敗，請重新整理頁面後再試一次。");
+    showToast("初始化失敗，請確認伺服器與資料庫設定是否完成。");
   });
 });
 
@@ -59,16 +56,13 @@ function collectElements() {
 }
 
 async function bootstrap() {
-  state.db = await openDatabase();
-  const sessionUsername = localStorage.getItem(SESSION_KEY);
-  if (sessionUsername) {
-    state.currentUser = await getUser(sessionUsername);
-    if (!state.currentUser) {
-      localStorage.removeItem(SESSION_KEY);
-    }
+  await loadSession({ silent: false });
+
+  if (elements.messageList) {
+    await loadMessages();
   }
-  bindEvents();
-  await refreshUI();
+
+  updateSessionPanel();
 }
 
 function bindEvents() {
@@ -96,69 +90,53 @@ function bindEvents() {
   }
 }
 
-function openDatabase() {
-  return new Promise((resolve, reject) => {
-    const request = window.indexedDB.open(DB_NAME, DB_VERSION);
+async function fetchJson(url, options = {}) {
+  const requestOptions = {
+    credentials: "same-origin",
+    ...options,
+    headers: {
+      ...(options.body ? { "Content-Type": "application/json" } : {}),
+      ...(options.headers || {}),
+    },
+  };
 
-    request.onupgradeneeded = () => {
-      const db = request.result;
-      if (!db.objectStoreNames.contains(USER_STORE)) {
-        db.createObjectStore(USER_STORE, { keyPath: "username" });
-      }
-      if (!db.objectStoreNames.contains(MESSAGE_STORE)) {
-        const messageStore = db.createObjectStore(MESSAGE_STORE, {
-          keyPath: "id",
-          autoIncrement: true,
-        });
-        messageStore.createIndex("createdAt", "createdAt");
-      }
-    };
+  const response = await fetch(url, requestOptions);
+  const contentType = response.headers.get("content-type") || "";
+  const payload = contentType.includes("application/json") ? await response.json() : {};
 
-    request.onsuccess = () => resolve(request.result);
-    request.onerror = () => reject(request.error);
-  });
+  if (!response.ok) {
+    throw new Error(payload.message || "請求失敗，請稍後再試。");
+  }
+
+  return payload;
 }
 
-function transaction(storeName, mode, handler) {
-  return new Promise((resolve, reject) => {
-    const tx = state.db.transaction(storeName, mode);
-    const store = tx.objectStore(storeName);
-    const result = handler(store);
-
-    tx.oncomplete = () => resolve(result);
-    tx.onerror = () => reject(tx.error || new Error("資料庫交易失敗"));
-    tx.onabort = () => reject(tx.error || new Error("資料庫交易已中止"));
-  });
+async function loadSession({ silent } = { silent: true }) {
+  try {
+    const payload = await fetchJson("/api/session");
+    state.currentUser = payload.user || null;
+  } catch (error) {
+    state.currentUser = null;
+    if (!silent) {
+      showToast(error.message);
+    }
+  }
 }
 
-function requestToPromise(request) {
-  return new Promise((resolve, reject) => {
-    request.onsuccess = () => resolve(request.result);
-    request.onerror = () => reject(request.error);
-  });
-}
-
-async function getUser(username) {
-  if (!username) return null;
-  return transaction(USER_STORE, "readonly", (store) => requestToPromise(store.get(username)));
-}
-
-async function getAllMessages() {
-  const messages = await transaction(MESSAGE_STORE, "readonly", (store) =>
-    requestToPromise(store.getAll())
-  );
-  return messages.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-}
-
-async function refreshUI() {
-  updateSessionPanel();
-  await renderMessages();
+async function loadMessages() {
+  try {
+    const payload = await fetchJson("/api/messages");
+    state.messages = payload.messages || [];
+    renderMessages();
+  } catch (error) {
+    state.messages = [];
+    renderMessages();
+    showToast(error.message);
+  }
 }
 
 function updateSessionPanel() {
-  const isLoggedIn = Boolean(state.currentUser);
-
-  if (isLoggedIn) {
+  if (state.currentUser) {
     setText(elements.currentUserName, state.currentUser.username);
     setAvatar(
       elements.currentUserAvatar,
@@ -170,24 +148,24 @@ function updateSessionPanel() {
     toggleHidden(elements.guestHint, true);
     toggleHidden(elements.composerGuard, true);
     setDisabled(elements.messageInput, false);
-  } else {
-    setText(elements.currentUserName, "訪客模式");
-    setAvatar(elements.currentUserAvatar, defaultAvatar, "預設訪客頭貼");
-    setText(elements.statusText, "尚未登入，請先註冊或登入後才可留言。");
-    toggleHidden(elements.logoutButton, true);
-    toggleHidden(elements.guestHint, false);
-    toggleHidden(elements.composerGuard, false);
-    setDisabled(elements.messageInput, true);
+    return;
   }
+
+  setText(elements.currentUserName, "訪客模式");
+  setAvatar(elements.currentUserAvatar, defaultAvatar, "預設訪客頭貼");
+  setText(elements.statusText, "尚未登入，請先註冊或登入後才可留言。");
+  toggleHidden(elements.logoutButton, true);
+  toggleHidden(elements.guestHint, false);
+  toggleHidden(elements.composerGuard, false);
+  setDisabled(elements.messageInput, true);
 }
 
-async function renderMessages() {
+function renderMessages() {
   if (!elements.messageList) return;
 
-  const messages = await getAllMessages();
   elements.messageList.innerHTML = "";
 
-  if (!messages.length) {
+  if (!state.messages.length) {
     const empty = document.createElement("div");
     empty.className = "empty-state";
     empty.textContent = "目前還沒有留言。完成註冊並登入後，來留下第一則訊息吧。";
@@ -195,22 +173,18 @@ async function renderMessages() {
     return;
   }
 
-  const fragments = document.createDocumentFragment();
+  const fragment = document.createDocumentFragment();
 
-  for (const message of messages) {
-    const user = await getUser(message.author);
-    const avatar = user?.avatarDataUrl || defaultAvatar;
-
+  for (const message of state.messages) {
     const card = document.createElement("article");
     card.className = "message-card";
 
     const avatarImage = document.createElement("img");
-    avatarImage.src = avatar;
+    avatarImage.src = message.avatarDataUrl || defaultAvatar;
     avatarImage.alt = `${message.author} 的頭貼`;
     card.appendChild(avatarImage);
 
     const content = document.createElement("div");
-
     const top = document.createElement("div");
     top.className = "message-top";
 
@@ -219,10 +193,9 @@ async function renderMessages() {
       <strong>${escapeHtml(message.author)}</strong>
       <span class="message-time">${formatDate(message.createdAt)}</span>
     `;
-
     top.appendChild(meta);
 
-    if (state.currentUser?.username === message.author) {
+    if (message.canDelete) {
       const deleteButton = document.createElement("button");
       deleteButton.type = "button";
       deleteButton.className = "delete-button";
@@ -238,27 +211,18 @@ async function renderMessages() {
     content.appendChild(top);
     content.appendChild(body);
     card.appendChild(content);
-    fragments.appendChild(card);
+    fragment.appendChild(card);
   }
 
-  elements.messageList.appendChild(fragments);
+  elements.messageList.appendChild(fragment);
 }
 
 async function handleRegister(event) {
   event.preventDefault();
+
   const username = elements.registerUsername.value.trim();
   const password = elements.registerPassword.value;
   const file = elements.registerAvatarInput.files?.[0];
-
-  if (!username || username.length < 3) {
-    showToast("註冊帳號至少需要 3 個字元。");
-    return;
-  }
-
-  if (!password || password.length < 6) {
-    showToast("密碼至少需要 6 個字元。");
-    return;
-  }
 
   if (!file) {
     showToast("請上傳一張 jpg 或 png 頭貼。");
@@ -270,152 +234,114 @@ async function handleRegister(event) {
     return;
   }
 
-  const existingUser = await getUser(username);
-  if (existingUser) {
-    showToast("這個帳號名稱已被使用，請換一個試試看。");
-    return;
-  }
-
   try {
     const avatarDataUrl = await fileToDataUrl(file);
-    const passwordHash = await hashText(password);
-    const user = {
-      username,
-      passwordHash,
-      avatarDataUrl,
-      createdAt: new Date().toISOString(),
-    };
-
-    await transaction(USER_STORE, "readwrite", (store) => {
-      store.add(user);
+    const payload = await fetchJson("/api/register", {
+      method: "POST",
+      body: JSON.stringify({
+        username,
+        password,
+        avatarDataUrl,
+      }),
     });
 
-    state.currentUser = user;
-    localStorage.setItem(SESSION_KEY, user.username);
+    state.currentUser = payload.user;
+    updateSessionPanel();
     elements.registerForm.reset();
-    if (elements.loginForm) {
-      elements.loginForm.reset();
-    }
-    await refreshUI();
-    showToast(`註冊成功，${user.username} 已自動登入。`);
+    showToast(payload.message || "註冊成功。");
     redirectAfterAuth();
   } catch (error) {
-    console.error(error);
-    showToast("註冊失敗，請稍後再試。");
+    showToast(error.message);
   }
 }
 
 async function handleLogin(event) {
   event.preventDefault();
-  const username = elements.loginUsername.value.trim();
-  const password = elements.loginPassword.value;
 
-  if (!username || !password) {
-    showToast("請輸入帳號與密碼後再登入。");
-    return;
+  try {
+    const payload = await fetchJson("/api/login", {
+      method: "POST",
+      body: JSON.stringify({
+        username: elements.loginUsername.value.trim(),
+        password: elements.loginPassword.value,
+      }),
+    });
+
+    state.currentUser = payload.user;
+    updateSessionPanel();
+    elements.loginForm.reset();
+    showToast(payload.message || "登入成功。");
+    redirectAfterAuth();
+  } catch (error) {
+    showToast(error.message);
   }
+}
 
-  const user = await getUser(username);
-  if (!user) {
-    showToast("找不到這個帳號，請先註冊。");
-    return;
+async function handleLogout() {
+  try {
+    const payload = await fetchJson("/api/logout", {
+      method: "POST",
+    });
+
+    state.currentUser = null;
+    updateSessionPanel();
+    await loadMessages();
+    showToast(payload.message || "已安全登出。");
+  } catch (error) {
+    showToast(error.message);
   }
-
-  const passwordHash = await hashText(password);
-  if (passwordHash !== user.passwordHash) {
-    showToast("密碼不正確，請再試一次。");
-    return;
-  }
-
-  state.currentUser = user;
-  localStorage.setItem(SESSION_KEY, user.username);
-  elements.loginForm.reset();
-  await refreshUI();
-  showToast(`登入成功，歡迎 ${user.username}。`);
-  redirectAfterAuth();
 }
 
 async function handleMessageSubmit(event) {
   event.preventDefault();
 
-  if (!state.currentUser) {
-    showToast("請先登入後再留言。");
-    return;
-  }
-
-  const content = elements.messageInput.value.trim();
-  if (!content) {
-    showToast("留言內容不能空白。");
-    return;
-  }
-
-  if (content.length > 300) {
-    showToast("留言請控制在 300 字以內。");
-    return;
-  }
-
-  await transaction(MESSAGE_STORE, "readwrite", (store) => {
-    store.add({
-      author: state.currentUser.username,
-      content,
-      createdAt: new Date().toISOString(),
+  try {
+    const payload = await fetchJson("/api/messages", {
+      method: "POST",
+      body: JSON.stringify({
+        content: elements.messageInput.value.trim(),
+      }),
     });
-  });
 
-  elements.messageForm.reset();
-  await renderMessages();
-  showToast("留言已送出。");
+    elements.messageForm.reset();
+    await loadMessages();
+    showToast(payload.message || "留言已送出。");
+  } catch (error) {
+    showToast(error.message);
+  }
 }
 
 async function handleDeleteMessage(messageId) {
-  if (!state.currentUser) {
-    showToast("請先登入。");
-    return;
+  try {
+    const payload = await fetchJson(`/api/messages?id=${messageId}`, {
+      method: "DELETE",
+    });
+
+    await loadMessages();
+    showToast(payload.message || "留言已刪除。");
+  } catch (error) {
+    showToast(error.message);
   }
-
-  const messages = await getAllMessages();
-  const target = messages.find((message) => message.id === messageId);
-
-  if (!target) {
-    showToast("找不到要刪除的留言。");
-    return;
-  }
-
-  if (target.author !== state.currentUser.username) {
-    showToast("只能刪除自己的留言。");
-    return;
-  }
-
-  await transaction(MESSAGE_STORE, "readwrite", (store) => {
-    store.delete(messageId);
-  });
-
-  await renderMessages();
-  showToast("留言已刪除。");
 }
 
-function handleLogout() {
-  state.currentUser = null;
-  localStorage.removeItem(SESSION_KEY);
-  updateSessionPanel();
-  renderMessages().catch((error) => {
-    console.error(error);
-    showToast("登出後重新整理留言失敗。");
-  });
-  showToast("已安全登出。");
+function redirectAfterAuth() {
+  const redirectTarget = document.body.dataset.authRedirect;
+  if (!redirectTarget) return;
+
+  window.setTimeout(() => {
+    window.location.href = redirectTarget;
+  }, 650);
 }
 
 function showToast(message) {
-  if (!elements.toast) {
-    return;
-  }
+  if (!elements.toast) return;
 
   elements.toast.textContent = message;
   elements.toast.classList.add("show");
   clearTimeout(state.toastTimer);
   state.toastTimer = window.setTimeout(() => {
     elements.toast.classList.remove("show");
-  }, 2600);
+  }, 2800);
 }
 
 function setText(element, text) {
@@ -443,15 +369,6 @@ function setAvatar(element, src, alt) {
   }
 }
 
-function redirectAfterAuth() {
-  const redirectTarget = document.body.dataset.authRedirect;
-  if (!redirectTarget) return;
-
-  window.setTimeout(() => {
-    window.location.href = redirectTarget;
-  }, 650);
-}
-
 function isSupportedImage(file) {
   return ["image/jpeg", "image/png"].includes(file.type);
 }
@@ -465,27 +382,18 @@ function fileToDataUrl(file) {
   });
 }
 
-async function hashText(text) {
-  const encoded = new TextEncoder().encode(text);
-  const hashBuffer = await crypto.subtle.digest("SHA-256", encoded);
-  return [...new Uint8Array(hashBuffer)]
-    .map((value) => value.toString(16).padStart(2, "0"))
-    .join("");
-}
-
 function formatDate(isoString) {
-  const date = new Date(isoString);
   return new Intl.DateTimeFormat("zh-TW", {
     year: "numeric",
     month: "long",
     day: "numeric",
     hour: "2-digit",
     minute: "2-digit",
-  }).format(date);
+  }).format(new Date(isoString));
 }
 
 function escapeHtml(value) {
-  return value
+  return String(value)
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")
