@@ -16,7 +16,7 @@ module.exports = async (request, response) => {
     const activeSession = await getSessionUser(request);
     if (activeSession) {
       sendJson(response, 200, {
-        message: "目前已經登入，不需要重新註冊。",
+        message: "You are already signed in. No need to register again.",
         user: activeSession.user,
       });
       return;
@@ -27,22 +27,22 @@ module.exports = async (request, response) => {
     const normalizedPassword = String(password || "");
 
     if (normalizedUsername.length < 3 || normalizedUsername.length > 20) {
-      sendJson(response, 400, { message: "帳號名稱需介於 3 到 20 個字元。" });
+      sendJson(response, 400, { message: "Username must be between 3 and 20 characters." });
       return;
     }
 
     if (normalizedPassword.length < 6 || normalizedPassword.length > 64) {
-      sendJson(response, 400, { message: "密碼需介於 6 到 64 個字元。" });
+      sendJson(response, 400, { message: "Password must be between 6 and 64 characters." });
       return;
     }
 
     if (!isValidAvatar(avatarDataUrl)) {
-      sendJson(response, 400, { message: "頭貼格式只接受 jpg、jpeg 或 png。" });
+      sendJson(response, 400, { message: "Only jpg, jpeg, or png avatars are allowed." });
       return;
     }
 
     if (avatarDataUrl.length > 2_000_000) {
-      sendJson(response, 400, { message: "頭貼檔案過大，請改用較小的圖片。" });
+      sendJson(response, 400, { message: "Avatar file is too large. Please use a smaller image." });
       return;
     }
 
@@ -51,7 +51,7 @@ module.exports = async (request, response) => {
       [normalizedUsername]
     );
     if (existingUser.rows.length) {
-      sendJson(response, 409, { message: "這個帳號名稱已被使用，請換一個試試看。" });
+      sendJson(response, 409, { message: "This username is already in use. Please choose another one." });
       return;
     }
 
@@ -71,13 +71,13 @@ module.exports = async (request, response) => {
     setSessionCookie(response, request, token);
 
     sendJson(response, 201, {
-      message: `註冊成功，${user.username} 已自動登入。`,
+      message: `Registration successful. ${user.username} has been signed in automatically.`,
       user,
     });
   } catch (error) {
     console.error(error);
     sendJson(response, 500, {
-      message: error.message || "註冊失敗，請稍後再試。",
+      message: error.message || "Registration failed. Please try again later.",
     });
   }
 };

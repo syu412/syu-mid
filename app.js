@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
   bindEvents();
   bootstrap().catch((error) => {
     console.error(error);
-    showToast("初始化失敗，請確認伺服器與資料庫設定是否完成。");
+    showToast("Initialization failed. Please check your server and database setup.");
   });
 });
 
@@ -108,7 +108,7 @@ async function fetchJson(url, options = {}) {
   const payload = contentType.includes("application/json") ? await response.json() : {};
 
   if (!response.ok) {
-    throw new Error(payload.message || "請求失敗，請稍後再試。");
+    throw new Error(payload.message || "Request failed. Please try again later.");
   }
 
   return payload;
@@ -144,9 +144,9 @@ function updateSessionPanel() {
     setAvatar(
       elements.currentUserAvatar,
       state.currentUser.avatarDataUrl || defaultAvatar,
-      `${state.currentUser.username} 的頭貼`
+      `${state.currentUser.username}'s avatar`
     );
-    setText(elements.statusText, `已登入，歡迎回來 ${state.currentUser.username}。`);
+    setText(elements.statusText, `Signed in as ${state.currentUser.username}.`);
     toggleHidden(elements.logoutButton, false);
     toggleHiddenForAll(elements.logoutTriggers, false);
     toggleHiddenForAll(elements.navLoginLinks, true);
@@ -157,9 +157,9 @@ function updateSessionPanel() {
     return;
   }
 
-  setText(elements.currentUserName, "訪客模式");
-  setAvatar(elements.currentUserAvatar, defaultAvatar, "預設訪客頭貼");
-  setText(elements.statusText, "尚未登入，請先註冊或登入後才可留言。");
+  setText(elements.currentUserName, "Guest mode");
+  setAvatar(elements.currentUserAvatar, defaultAvatar, "Default guest avatar");
+  setText(elements.statusText, "You are not signed in yet. Please register or log in before posting.");
   toggleHidden(elements.logoutButton, true);
   toggleHiddenForAll(elements.logoutTriggers, true);
   toggleHiddenForAll(elements.navLoginLinks, false);
@@ -177,7 +177,7 @@ function renderMessages() {
   if (!state.messages.length) {
     const empty = document.createElement("div");
     empty.className = "empty-state";
-    empty.textContent = "目前還沒有留言。完成註冊並登入後，來留下第一則訊息吧。";
+    empty.textContent = "There are no messages yet. Register and log in to leave the first one.";
     elements.messageList.appendChild(empty);
     return;
   }
@@ -190,7 +190,7 @@ function renderMessages() {
 
     const avatarImage = document.createElement("img");
     avatarImage.src = message.avatarDataUrl || defaultAvatar;
-    avatarImage.alt = `${message.author} 的頭貼`;
+    avatarImage.alt = `${message.author}'s avatar`;
     card.appendChild(avatarImage);
 
     const content = document.createElement("div");
@@ -208,7 +208,7 @@ function renderMessages() {
       const deleteButton = document.createElement("button");
       deleteButton.type = "button";
       deleteButton.className = "delete-button";
-      deleteButton.textContent = "刪除我的留言";
+      deleteButton.textContent = "Delete my message";
       deleteButton.addEventListener("click", () => handleDeleteMessage(message.id));
       top.appendChild(deleteButton);
     }
@@ -234,12 +234,12 @@ async function handleRegister(event) {
   const file = elements.registerAvatarInput.files?.[0];
 
   if (!file) {
-    showToast("請上傳一張 jpg 或 png 頭貼。");
+    showToast("Please upload a jpg or png avatar.");
     return;
   }
 
   if (!isSupportedImage(file)) {
-    showToast("頭貼格式只接受 jpg、jpeg 或 png。");
+    showToast("Only jpg, jpeg, or png avatars are allowed.");
     return;
   }
 
@@ -257,7 +257,7 @@ async function handleRegister(event) {
     state.currentUser = payload.user;
     updateSessionPanel();
     elements.registerForm.reset();
-    showToast(payload.message || "註冊成功。");
+    showToast(payload.message || "Registration completed.");
     redirectAfterAuth();
   } catch (error) {
     showToast(error.message);
@@ -279,7 +279,7 @@ async function handleLogin(event) {
     state.currentUser = payload.user;
     updateSessionPanel();
     elements.loginForm.reset();
-    showToast(payload.message || "登入成功。");
+    showToast(payload.message || "Login successful.");
     redirectAfterAuth();
   } catch (error) {
     showToast(error.message);
@@ -295,7 +295,7 @@ async function handleLogout() {
     state.currentUser = null;
     updateSessionPanel();
     await loadMessages();
-    showToast(payload.message || "已安全登出。");
+    showToast(payload.message || "Logged out successfully.");
   } catch (error) {
     showToast(error.message);
   }
@@ -314,7 +314,7 @@ async function handleMessageSubmit(event) {
 
     elements.messageForm.reset();
     await loadMessages();
-    showToast(payload.message || "留言已送出。");
+    showToast(payload.message || "Message posted.");
   } catch (error) {
     showToast(error.message);
   }
@@ -327,7 +327,7 @@ async function handleDeleteMessage(messageId) {
     });
 
     await loadMessages();
-    showToast(payload.message || "留言已刪除。");
+    showToast(payload.message || "Message deleted.");
   } catch (error) {
     showToast(error.message);
   }

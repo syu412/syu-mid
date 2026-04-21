@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>個人網站與訪客留言板</title>
+    <title>Personal Site and Guestbook</title>
     <meta
       name="description"
-      content="包含網站主人頭像、自我介紹、註冊登入、頭貼上傳與留言板功能的個人網站作品。"
+      content="A personal website project with a profile photo, login, registration, avatar upload, and guestbook features."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -20,13 +20,9 @@
     <div class="page-shell">
       <header class="topbar">
         <div class="topbar-inner">
-          <div class="brand">
-            <span class="brand-mark">Portfolio Site</span>
-            <strong class="brand-title">個人網站與訪客互動系統</strong>
-          </div>
-          <nav class="nav" aria-label="主要導覽">
+
+          <nav class="nav" aria-label="Main navigation">
             <a class="nav-link active" href="index.html">HOME</a>
-            <a class="nav-link" href="index.html#about">ABOUT</a>
             <a class="nav-link" href="index.html#guestbook">MESSAGES</a>
             <a class="nav-link" data-nav-login href="login.html">LOGIN</a>
             <a class="nav-link" data-nav-register href="register.html">REGISTER</a>
@@ -37,85 +33,39 @@
 
       <main>
         <section class="hero">
+          <aside class="hero-card" aria-label="Profile summary">
+            <div class="hero-portrait">
+              <img src="assets/profile-pic.jpg" alt="Profile photo" />
+            </div>
+ 
+          </aside>
+
           <div class="hero-copy">
-            <h1>
-              歡迎來到我的
-              <span>個人網站</span>
+            <h1>SYU
             </h1>
             <p class="hero-text">
-              這個作品把作業要求整合成一個完整的個人網站：首頁展示網站主人的頭貼與介紹，登入與註冊改為獨立頁面，留言板則保留在首頁供會員互動使用。
+                哈囉大家好。看星星、玩魔術、還有一點塔羅，喜歡做的事好像有點多，但最近很忙，什麼都沒做。總之水深火熱中，事情有點多，好想休息。
             </p>
-            <div class="hero-actions">
-              <a class="button button-primary" href="register.html">前往註冊頁</a>
-              <a class="button button-secondary" href="login.html">前往登入頁</a>
-              <a class="button button-secondary" href="#guestbook">直接看留言板</a>
-            </div>
           </div>
-
-          <aside class="hero-card" aria-label="網站主人資訊摘要">
-            <div class="hero-portrait">
-              <img src="assets/owner-avatar.svg" alt="網站主人的示意頭像" />
-            </div>
-            <div class="hero-meta">
-              <div>
-                <strong>網站主人</strong>
-                <span>王小明 / 資訊設計學生</span>
-              </div>
-              <div>
-                <strong>網站主題</strong>
-                <span>自我介紹與訪客互動</span>
-              </div>
-            </div>
-          </aside>
         </section>
 
-        <section class="content-grid">
+        <section class="content-grid content-grid-single">
           <div class="stack">
-            <section class="panel about-layout" id="about">
-              <div>
-                <h2>網站主人自我介紹</h2>
-                <p class="section-copy">
-                  大家好，我是王小明，目前專注在前端互動設計與網頁應用開發。我喜歡把介面做得不只「能用」，還要清楚、有層次，也能讓使用者一眼理解功能流程。這個網站以作業需求為核心，示範了會員註冊、登入驗證、頭貼上傳與留言板整合，讓頁面兼具展示與互動用途。
-                </p>
-              </div>
-
-              <div class="fact-grid">
-                <article class="fact-card">
-                  <strong>01</strong>
-                  <span>以個人品牌感視覺呈現網站主人的頭像與介紹。</span>
-                </article>
-                <article class="fact-card">
-                  <strong>02</strong>
-                  <span>提供訪客完整註冊、登入與頭貼上傳流程。</span>
-                </article>
-                <article class="fact-card">
-                  <strong>03</strong>
-                  <span>讓登入會員可留言，並刪除自己留下的內容。</span>
-                </article>
-              </div>
-            </section>
-
-
-          </div>
-
-          <div class="stack">
-            
-
             <section class="panel" id="guestbook">
-              <h2>會員留言板</h2>
+              <h2>Member Message Board</h2>
               <p class="section-copy">
-                只有已註冊並登入的訪客可以留言。留言區左側會顯示使用者頭貼，並且留言本人可刪除自己的內容。
+                Only registered and logged-in visitors can leave messages.
               </p>
 
               <div class="stack">
                 <div class="status-bar">
-                  <div class="status-pill" id="status-text">尚未登入，請先註冊或登入後才可留言。</div>
+                  <div class="status-pill" id="status-text">You are not signed in yet. Please register or log in before posting.</div>
                   <div class="status-actions">
                     <button class="button button-secondary hidden" id="logout-button" data-logout-trigger type="button">
-                      登出
+                      Log out
                     </button>
                     <button class="button button-primary" id="jump-composer-button" type="button">
-                      前往留言
+                      Write a message
                     </button>
                   </div>
                 </div>
@@ -123,35 +73,35 @@
                 <section class="message-compose" id="message-composer">
                   <div class="compose-header">
                     <div class="mini-user">
-                      <img id="current-user-avatar" src="assets/owner-avatar.svg" alt="目前使用者頭貼" />
+                      <img id="current-user-avatar" src="assets/owner-avatar.svg" alt="Current user avatar" />
                       <div>
-                        <strong id="current-user-name">訪客模式</strong>
-                        <p class="helper" id="guest-hint">請先完成註冊或登入。</p>
+                        <strong id="current-user-name">Guest mode</strong>
+                        <p class="helper" id="guest-hint">Please register or log in first.</p>
                       </div>
                     </div>
-                    <div class="helper" id="composer-guard">登入後即可開始留言。</div>
+                    <div class="helper" id="composer-guard">You can start posting after logging in.</div>
                   </div>
 
                   <form id="message-form" class="form-grid">
                     <div class="field">
-                      <label for="message-input">留言內容</label>
+                      <label for="message-input">Message</label>
                       <textarea
                         id="message-input"
                         class="textarea"
                         name="message"
                         maxlength="300"
-                        placeholder="登入後寫下你的想法或回饋..."
+                        placeholder="Write your thoughts or feedback after logging in..."
                         disabled
                         required
                       ></textarea>
                     </div>
 
-                    <button class="button button-primary" type="submit">送出留言</button>
+                    <button class="button button-primary" type="submit">Post message</button>
                   </form>
                 </section>
 
                 <section class="message-list" aria-live="polite">
-                  <h3>最新留言</h3>
+                  <h3>Latest messages</h3>
                   <div id="message-list"></div>
                 </section>
               </div>

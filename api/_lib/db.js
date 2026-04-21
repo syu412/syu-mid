@@ -16,7 +16,7 @@ function getPool() {
   if (!pool) {
     const connectionString = getConnectionString();
     if (!connectionString) {
-      throw new Error("尚未設定 DATABASE_URL，請先在 Vercel 專案中加入 Postgres 連線字串。");
+      throw new Error("DATABASE_URL is not configured yet. Please add your Postgres connection string in Vercel.");
     }
 
     pool = new Pool({

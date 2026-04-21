@@ -34,7 +34,7 @@ async function listMessages(request, response) {
 async function createMessage(request, response) {
   const session = await getSessionUser(request);
   if (!session) {
-    sendJson(response, 401, { message: "請先登入後再留言。" });
+    sendJson(response, 401, { message: "Please log in before posting a message." });
     return;
   }
 
@@ -42,12 +42,12 @@ async function createMessage(request, response) {
   const normalizedContent = String(content || "").trim();
 
   if (!normalizedContent) {
-    sendJson(response, 400, { message: "留言內容不能空白。" });
+    sendJson(response, 400, { message: "Message content cannot be empty." });
     return;
   }
 
   if (normalizedContent.length > 300) {
-    sendJson(response, 400, { message: "留言請控制在 300 字以內。" });
+    sendJson(response, 400, { message: "Please keep your message within 300 characters." });
     return;
   }
 
@@ -56,13 +56,13 @@ async function createMessage(request, response) {
     normalizedContent,
   ]);
 
-  sendJson(response, 201, { message: "留言已送出。" });
+  sendJson(response, 201, { message: "Message posted." });
 }
 
 async function deleteMessage(request, response) {
   const session = await getSessionUser(request);
   if (!session) {
-    sendJson(response, 401, { message: "請先登入。" });
+    sendJson(response, 401, { message: "Please log in first." });
     return;
   }
 
@@ -75,7 +75,7 @@ async function deleteMessage(request, response) {
   }
 
   if (!Number.isInteger(messageId) || messageId <= 0) {
-    sendJson(response, 400, { message: "找不到要刪除的留言。" });
+    sendJson(response, 400, { message: "The message you want to delete could not be found." });
     return;
   }
 
@@ -85,11 +85,11 @@ async function deleteMessage(request, response) {
   );
 
   if (!deletion.rows.length) {
-    sendJson(response, 404, { message: "只能刪除自己的留言，或留言已不存在。" });
+    sendJson(response, 404, { message: "You can only delete your own message, or the message no longer exists." });
     return;
   }
 
-  sendJson(response, 200, { message: "留言已刪除。" });
+  sendJson(response, 200, { message: "Message deleted." });
 }
 
 module.exports = async (request, response) => {
@@ -113,7 +113,7 @@ module.exports = async (request, response) => {
   } catch (error) {
     console.error(error);
     sendJson(response, 500, {
-      message: error.message || "留言功能發生錯誤，請稍後再試。",
+      message: error.message || "The guestbook encountered an error. Please try again later.",
     });
   }
 };

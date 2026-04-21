@@ -26,7 +26,7 @@ module.exports = async (request, response) => {
   } catch (error) {
     console.error(error);
     sendJson(response, 500, {
-      message: error.message || "無法取得登入狀態。",
+      message: error.message || "Unable to retrieve the current session.",
     });
   }
 };

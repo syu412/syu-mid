@@ -12,7 +12,7 @@ module.exports = async (request, response) => {
     const activeSession = await getSessionUser(request);
     if (activeSession) {
       sendJson(response, 200, {
-        message: `已登入為 ${activeSession.user.username}。`,
+        message: `Already signed in as ${activeSession.user.username}.`,
         user: activeSession.user,
       });
       return;
@@ -23,7 +23,7 @@ module.exports = async (request, response) => {
     const normalizedPassword = String(password || "");
 
     if (!normalizedUsername || !normalizedPassword) {
-      sendJson(response, 400, { message: "請輸入帳號與密碼後再登入。" });
+      sendJson(response, 400, { message: "Please enter both username and password." });
       return;
     }
 
@@ -43,7 +43,7 @@ module.exports = async (request, response) => {
     );
 
     if (!result.rows.length) {
-      sendJson(response, 404, { message: "找不到這個帳號，請先註冊。" });
+      sendJson(response, 404, { message: "This account does not exist yet. Please register first." });
       return;
     }
 
@@ -55,7 +55,7 @@ module.exports = async (request, response) => {
     );
 
     if (!passwordValid) {
-      sendJson(response, 401, { message: "密碼不正確，請再試一次。" });
+      sendJson(response, 401, { message: "Incorrect password. Please try again." });
       return;
     }
 
@@ -63,7 +63,7 @@ module.exports = async (request, response) => {
     setSessionCookie(response, request, token);
 
     sendJson(response, 200, {
-      message: `登入成功，歡迎 ${userRecord.username}。`,
+      message: `Login successful. Welcome, ${userRecord.username}.`,
       user: {
         id: userRecord.id,
         username: userRecord.username,
@@ -73,7 +73,7 @@ module.exports = async (request, response) => {
   } catch (error) {
     console.error(error);
     sendJson(response, 500, {
-      message: error.message || "登入失敗，請稍後再試。",
+      message: error.message || "Login failed. Please try again later.",
     });
   }
 };

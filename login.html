@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>會員登入 | 個人網站與訪客留言板</title>
+    <title>Login | Personal Site and Guestbook</title>
     <meta
       name="description"
-      content="個人網站的獨立會員登入頁面，登入後可回到留言板進行互動。"
+      content="Standalone login page for the personal website guestbook project."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -20,13 +20,9 @@
     <div class="page-shell">
       <header class="topbar">
         <div class="topbar-inner">
-          <div class="brand">
-            <span class="brand-mark">Portfolio Site</span>
-            <strong class="brand-title">個人網站與訪客互動系統</strong>
-          </div>
-          <nav class="nav" aria-label="主要導覽">
+
+          <nav class="nav" aria-label="Main navigation">
             <a class="nav-link" href="index.html">HOME</a>
-            <a class="nav-link" href="index.html#about">ABOUT</a>
             <a class="nav-link" href="index.html#guestbook">MESSAGES</a>
             <a class="nav-link active" data-nav-login href="login.html">LOGIN</a>
             <a class="nav-link" data-nav-register href="register.html">REGISTER</a>
@@ -38,42 +34,42 @@
       <main class="auth-main">
         <section class="auth-shell">
           <section class="page-card auth-page-card">
-            <h2>會員登入</h2>
+            <h2>Login</h2>
             <p class="section-copy">
-              輸入已註冊的帳號與密碼即可登入。登入驗證由伺服器處理，若還沒有帳號，可直接前往註冊頁面建立。
+              Enter your registered username and password to sign in. Authentication is handled by the server. If you do not have an account yet, go to the register page first.
             </p>
 
             <form id="login-form" class="form-grid auth-page-form">
               <div class="field">
-                <label for="login-username">帳號名稱</label>
+                <label for="login-username">Username</label>
                 <input
                   id="login-username"
                   class="input"
                   name="username"
                   type="text"
-                  placeholder="輸入已註冊帳號"
+                  placeholder="Enter your username"
                   required
                 />
               </div>
 
               <div class="field">
-                <label for="login-password">登入密碼</label>
+                <label for="login-password">Password</label>
                 <input
                   id="login-password"
                   class="input"
                   name="password"
                   type="password"
-                  placeholder="輸入你的密碼"
+                  placeholder="Enter your password"
                   required
                 />
               </div>
 
-              <button class="button button-primary" type="submit">登入帳號</button>
+              <button class="button button-primary" type="submit">Log in</button>
             </form>
 
             <p class="helper auth-switch">
-              還沒有帳號？
-              <a class="inline-link" href="register.html">前往註冊頁</a>
+              Don't have an account?
+              <a class="inline-link" href="register.html">Go to register</a>
             </p>
           </section>
         </section>

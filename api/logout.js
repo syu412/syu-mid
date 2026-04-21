@@ -14,11 +14,11 @@ module.exports = async (request, response) => {
     }
 
     clearSessionCookie(response, request);
-    sendJson(response, 200, { message: "已安全登出。" });
+    sendJson(response, 200, { message: "Logged out successfully." });
   } catch (error) {
     console.error(error);
     sendJson(response, 500, {
-      message: error.message || "登出失敗，請稍後再試。",
+      message: error.message || "Logout failed. Please try again later.",
     });
   }
 };

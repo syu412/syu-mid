@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>會員註冊 | 個人網站與訪客留言板</title>
+    <title>Register | Personal Site and Guestbook</title>
     <meta
       name="description"
-      content="個人網站的獨立會員註冊頁面，支援帳號建立、密碼設定與 jpg/png 頭貼上傳。"
+      content="Standalone registration page with account creation, password setup, and jpg/png avatar upload."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -20,13 +20,8 @@
     <div class="page-shell">
       <header class="topbar">
         <div class="topbar-inner">
-          <div class="brand">
-            <span class="brand-mark">Portfolio Site</span>
-            <strong class="brand-title">個人網站與訪客互動系統</strong>
-          </div>
-          <nav class="nav" aria-label="主要導覽">
+          <nav class="nav" aria-label="Main navigation">
             <a class="nav-link" href="index.html">HOME</a>
-            <a class="nav-link" href="index.html#about">ABOUT</a>
             <a class="nav-link" href="index.html#guestbook">MESSAGES</a>
             <a class="nav-link" data-nav-login href="login.html">LOGIN</a>
             <a class="nav-link active" data-nav-register href="register.html">REGISTER</a>
@@ -40,13 +35,11 @@
 
           <section class="page-card auth-page-card">
             <h2>REGISTER</h2>
-            <p class="section-copy">
-              註冊時必須上傳一張 jpg、jpeg 或 png 頭貼，帳號與頭貼資料會寫入雲端資料庫，之後可跨裝置登入。
-            </p>
+
 
             <form id="register-form" class="form-grid auth-page-form">
               <div class="field">
-                <label for="register-username">name</label>
+                <label for="register-username">Username</label>
                 <input
                   id="register-username"
                   class="input"
@@ -54,13 +47,13 @@
                   type="text"
                   minlength="3"
                   maxlength="20"
-                  placeholder="至少 3 個字元"
+                  placeholder="At least 3 characters"
                   required
                 />
               </div>
 
               <div class="field">
-                <label for="register-password">登入密碼</label>
+                <label for="register-password">Password</label>
                 <input
                   id="register-password"
                   class="input"
@@ -68,13 +61,13 @@
                   type="password"
                   minlength="6"
                   maxlength="32"
-                  placeholder="至少 6 個字元"
+                  placeholder="At least 6 characters"
                   required
                 />
               </div>
 
               <div class="field">
-                <label for="register-avatar">訪客頭貼</label>
+                <label for="register-avatar">Avatar</label>
                 <input
                   id="register-avatar"
                   class="file-input"
@@ -83,15 +76,15 @@
                   accept=".jpg,.jpeg,.png,image/jpeg,image/png"
                   required
                 />
-                <p class="helper">只接受 jpg、jpeg 或 png。</p>
+                <p class="helper">Only jpg, jpeg, or png files are accepted.</p>
               </div>
 
-              <button class="button button-primary" type="submit">完成註冊</button>
+              <button class="button button-primary" type="submit">Create account</button>
             </form>
 
             <p class="helper auth-switch">
-              已經有帳號？
-              <a class="inline-link" href="login.html">前往登入頁</a>
+              Already have an account?
+              <a class="inline-link" href="login.html">Go to login</a>
             </p>
           </section>
         </section>

@@ -5,7 +5,7 @@ function sendJson(response, statusCode, payload) {
 function methodNotAllowed(response, allowedMethods) {
   response.setHeader("Allow", allowedMethods.join(", "));
   sendJson(response, 405, {
-    message: `只接受 ${allowedMethods.join(" / ")} 請求。`,
+    message: `Only ${allowedMethods.join(" / ")} requests are allowed.`,
   });
 }
 
