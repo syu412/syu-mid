@@ -28,8 +28,9 @@
             <a class="nav-link" href="index.html">HOME</a>
             <a class="nav-link" href="index.html#about">ABOUT</a>
             <a class="nav-link" href="index.html#guestbook">MESSAGES</a>
-            <a class="nav-link" href="login.html">LOGIN</a>
-            <a class="nav-link active" href="register.html">REGISTER</a>
+            <a class="nav-link" data-nav-login href="login.html">LOGIN</a>
+            <a class="nav-link active" data-nav-register href="register.html">REGISTER</a>
+            <button class="nav-link nav-link-button hidden" data-logout-trigger type="button">LOGOUT</button>
           </nav>
         </div>
       </header>
@@ -38,14 +39,14 @@
         <section class="auth-shell">
 
           <section class="page-card auth-page-card">
-            <h2>建立新帳號</h2>
+            <h2>REGISTER</h2>
             <p class="section-copy">
               註冊時必須上傳一張 jpg、jpeg 或 png 頭貼，帳號與頭貼資料會寫入雲端資料庫，之後可跨裝置登入。
             </p>
 
             <form id="register-form" class="form-grid auth-page-form">
               <div class="field">
-                <label for="register-username">帳號名稱</label>
+                <label for="register-username">name</label>
                 <input
                   id="register-username"
                   class="input"

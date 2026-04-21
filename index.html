@@ -28,8 +28,9 @@
             <a class="nav-link active" href="index.html">HOME</a>
             <a class="nav-link" href="index.html#about">ABOUT</a>
             <a class="nav-link" href="index.html#guestbook">MESSAGES</a>
-            <a class="nav-link" href="login.html">LOGIN</a>
-            <a class="nav-link" href="register.html">REGISTER</a>
+            <a class="nav-link" data-nav-login href="login.html">LOGIN</a>
+            <a class="nav-link" data-nav-register href="register.html">REGISTER</a>
+            <button class="nav-link nav-link-button hidden" data-logout-trigger type="button">LOGOUT</button>
           </nav>
         </div>
       </header>
@@ -110,7 +111,7 @@
                 <div class="status-bar">
                   <div class="status-pill" id="status-text">尚未登入，請先註冊或登入後才可留言。</div>
                   <div class="status-actions">
-                    <button class="button button-secondary hidden" id="logout-button" type="button">
+                    <button class="button button-secondary hidden" id="logout-button" data-logout-trigger type="button">
                       登出
                     </button>
                     <button class="button button-primary" id="jump-composer-button" type="button">

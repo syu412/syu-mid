@@ -45,6 +45,9 @@ function collectElements() {
     currentUserAvatar: document.querySelector("#current-user-avatar"),
     statusText: document.querySelector("#status-text"),
     logoutButton: document.querySelector("#logout-button"),
+    logoutTriggers: [...document.querySelectorAll("[data-logout-trigger]")],
+    navLoginLinks: [...document.querySelectorAll("[data-nav-login]")],
+    navRegisterLinks: [...document.querySelectorAll("[data-nav-register]")],
     jumpComposerButton: document.querySelector("#jump-composer-button"),
     messageComposer: document.querySelector("#message-composer"),
     guestHint: document.querySelector("#guest-hint"),
@@ -78,9 +81,9 @@ function bindEvents() {
     elements.messageForm.addEventListener("submit", handleMessageSubmit);
   }
 
-  if (elements.logoutButton) {
-    elements.logoutButton.addEventListener("click", handleLogout);
-  }
+  elements.logoutTriggers.forEach((trigger) => {
+    trigger.addEventListener("click", handleLogout);
+  });
 
   if (elements.jumpComposerButton && elements.messageComposer && elements.messageInput) {
     elements.jumpComposerButton.addEventListener("click", () => {
@@ -145,6 +148,9 @@ function updateSessionPanel() {
     );
     setText(elements.statusText, `已登入，歡迎回來 ${state.currentUser.username}。`);
     toggleHidden(elements.logoutButton, false);
+    toggleHiddenForAll(elements.logoutTriggers, false);
+    toggleHiddenForAll(elements.navLoginLinks, true);
+    toggleHiddenForAll(elements.navRegisterLinks, true);
     toggleHidden(elements.guestHint, true);
     toggleHidden(elements.composerGuard, true);
     setDisabled(elements.messageInput, false);
@@ -155,6 +161,9 @@ function updateSessionPanel() {
   setAvatar(elements.currentUserAvatar, defaultAvatar, "預設訪客頭貼");
   setText(elements.statusText, "尚未登入，請先註冊或登入後才可留言。");
   toggleHidden(elements.logoutButton, true);
+  toggleHiddenForAll(elements.logoutTriggers, true);
+  toggleHiddenForAll(elements.navLoginLinks, false);
+  toggleHiddenForAll(elements.navRegisterLinks, false);
   toggleHidden(elements.guestHint, false);
   toggleHidden(elements.composerGuard, false);
   setDisabled(elements.messageInput, true);
@@ -354,6 +363,12 @@ function toggleHidden(element, hidden) {
   if (element) {
     element.classList.toggle("hidden", hidden);
   }
+}
+
+function toggleHiddenForAll(elementsList, hidden) {
+  elementsList.forEach((element) => {
+    element.classList.toggle("hidden", hidden);
+  });
 }
 
 function setDisabled(element, disabled) {

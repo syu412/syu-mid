@@ -144,6 +144,12 @@ button {
   transition: background-color 180ms ease, color 180ms ease, transform 180ms ease;
 }
 
+.nav-link-button {
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
 .nav-link:hover,
 .nav-link:focus-visible,
 .nav-link.active {
