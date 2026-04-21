@@ -1,5 +1,5 @@
 const { clearSessionCookie, destroySessionByToken, getSessionUser } = require("./_lib/auth");
-const { methodNotAllowed, sendJson } = require("./_lib/http");
+const { methodNotAllowed, sendError, sendJson } = require("./_lib/http");
 
 module.exports = async (request, response) => {
   if (request.method !== "POST") {
@@ -17,8 +17,6 @@ module.exports = async (request, response) => {
     sendJson(response, 200, { message: "Logged out successfully." });
   } catch (error) {
     console.error(error);
-    sendJson(response, 500, {
-      message: error.message || "Logout failed. Please try again later.",
-    });
+    sendError(response, error, "Logout failed. Please try again later.");
   }
 };

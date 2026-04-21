@@ -1,6 +1,7 @@
 const { createSession, getSessionUser, setSessionCookie, verifyPassword } = require("./_lib/auth");
 const { query } = require("./_lib/db");
-const { methodNotAllowed, readJsonBody, sendJson } = require("./_lib/http");
+const { MAX_JSON_BODY_BYTES, normalizePassword, normalizeUsername } = require("./_lib/security");
+const { methodNotAllowed, readJsonBody, sendError, sendJson } = require("./_lib/http");
 
 module.exports = async (request, response) => {
   if (request.method !== "POST") {
@@ -18,12 +19,24 @@ module.exports = async (request, response) => {
       return;
     }
 
-    const { username, password } = await readJsonBody(request);
-    const normalizedUsername = String(username || "").trim();
-    const normalizedPassword = String(password || "");
+    const { username, password } = await readJsonBody(request, {
+      maxBytes: MAX_JSON_BODY_BYTES,
+    });
+    const normalizedUsername = normalizeUsername(username);
+    const normalizedPassword = normalizePassword(password);
 
     if (!normalizedUsername || !normalizedPassword) {
       sendJson(response, 400, { message: "Please enter both username and password." });
+      return;
+    }
+
+    if (normalizedUsername.length < 3 || normalizedUsername.length > 20) {
+      sendJson(response, 400, { message: "Username must be between 3 and 20 characters." });
+      return;
+    }
+
+    if (normalizedPassword.length < 3 || normalizedPassword.length > 20) {
+      sendJson(response, 400, { message: "Password must be between 3 and 20 characters." });
       return;
     }
 
@@ -72,8 +85,6 @@ module.exports = async (request, response) => {
     });
   } catch (error) {
     console.error(error);
-    sendJson(response, 500, {
-      message: error.message || "Login failed. Please try again later.",
-    });
+    sendError(response, error, "Login failed. Please try again later.");
   }
 };

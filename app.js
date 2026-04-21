@@ -198,10 +198,13 @@ function renderMessages() {
     top.className = "message-top";
 
     const meta = document.createElement("div");
-    meta.innerHTML = `
-      <strong>${escapeHtml(message.author)}</strong>
-      <span class="message-time">${formatDate(message.createdAt)}</span>
-    `;
+    const author = document.createElement("strong");
+    author.textContent = message.author;
+    const timestamp = document.createElement("span");
+    timestamp.className = "message-time";
+    timestamp.textContent = formatDate(message.createdAt);
+    meta.appendChild(author);
+    meta.appendChild(timestamp);
     top.appendChild(meta);
 
     if (message.canDelete) {
@@ -405,13 +408,4 @@ function formatDate(isoString) {
     hour: "2-digit",
     minute: "2-digit",
   }).format(new Date(isoString));
-}
-
-function escapeHtml(value) {
-  return String(value)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
 }

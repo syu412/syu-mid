@@ -1,6 +1,7 @@
 const { getSessionUser } = require("./_lib/auth");
 const { query } = require("./_lib/db");
-const { methodNotAllowed, parseRequestUrl, readJsonBody, sendJson } = require("./_lib/http");
+const { MAX_JSON_BODY_BYTES, containsHtmlTag, normalizeMessageContent } = require("./_lib/security");
+const { methodNotAllowed, parseRequestUrl, readJsonBody, sendError, sendJson } = require("./_lib/http");
 
 async function listMessages(request, response) {
   const session = await getSessionUser(request);
@@ -38,8 +39,10 @@ async function createMessage(request, response) {
     return;
   }
 
-  const { content } = await readJsonBody(request);
-  const normalizedContent = String(content || "").trim();
+  const { content } = await readJsonBody(request, {
+    maxBytes: MAX_JSON_BODY_BYTES,
+  });
+  const normalizedContent = normalizeMessageContent(content);
 
   if (!normalizedContent) {
     sendJson(response, 400, { message: "Message content cannot be empty." });
@@ -48,6 +51,13 @@ async function createMessage(request, response) {
 
   if (normalizedContent.length > 300) {
     sendJson(response, 400, { message: "Please keep your message within 300 characters." });
+    return;
+  }
+
+  if (containsHtmlTag(normalizedContent)) {
+    sendJson(response, 400, {
+      message: "HTML tags are not allowed in messages.",
+    });
     return;
   }
 
@@ -70,7 +80,9 @@ async function deleteMessage(request, response) {
   let messageId = Number(url.searchParams.get("id"));
 
   if (!messageId && request.body) {
-    const body = await readJsonBody(request);
+    const body = await readJsonBody(request, {
+      maxBytes: MAX_JSON_BODY_BYTES,
+    });
     messageId = Number(body.id);
   }
 
@@ -112,8 +124,6 @@ module.exports = async (request, response) => {
     methodNotAllowed(response, ["GET", "POST", "DELETE"]);
   } catch (error) {
     console.error(error);
-    sendJson(response, 500, {
-      message: error.message || "The guestbook encountered an error. Please try again later.",
-    });
+    sendError(response, error, "The guestbook encountered an error. Please try again later.");
   }
 };

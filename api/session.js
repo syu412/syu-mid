@@ -1,5 +1,5 @@
 const { clearSessionCookie, getSessionUser } = require("./_lib/auth");
-const { methodNotAllowed, sendJson } = require("./_lib/http");
+const { methodNotAllowed, sendError, sendJson } = require("./_lib/http");
 
 module.exports = async (request, response) => {
   if (request.method !== "GET") {
@@ -25,8 +25,6 @@ module.exports = async (request, response) => {
     });
   } catch (error) {
     console.error(error);
-    sendJson(response, 500, {
-      message: error.message || "Unable to retrieve the current session.",
-    });
+    sendError(response, error, "Unable to retrieve the current session.");
   }
 };

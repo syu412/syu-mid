@@ -22,7 +22,6 @@
         <div class="topbar-inner">
           <nav class="nav" aria-label="Main navigation">
             <a class="nav-link" href="index.html">HOME</a>
-            <a class="nav-link" href="index.html#guestbook">MESSAGES</a>
             <a class="nav-link" data-nav-login href="login.html">LOGIN</a>
             <a class="nav-link active" data-nav-register href="register.html">REGISTER</a>
             <button class="nav-link nav-link-button hidden" data-logout-trigger type="button">LOGOUT</button>
@@ -47,9 +46,13 @@
                   type="text"
                   minlength="3"
                   maxlength="20"
-                  placeholder="At least 3 characters"
+                  pattern="[A-Za-z0-9._-]{3,20}"
+                  autocomplete="username"
+                  spellcheck="false"
+                  placeholder="3 to 20 characters"
                   required
                 />
+                <p class="helper">Use only letters, numbers, dots, underscores, and hyphens.</p>
               </div>
 
               <div class="field">
@@ -59,11 +62,13 @@
                   class="input"
                   name="password"
                   type="password"
-                  minlength="6"
-                  maxlength="32"
-                  placeholder="At least 6 characters"
+                  minlength="3"
+                  maxlength="20"
+                  autocomplete="new-password"
+                  placeholder="3 to 20 characters"
                   required
                 />
+                <p class="helper">Use 3 to 20 characters. Breached passwords are blocked during registration.</p>
               </div>
 
               <div class="field">

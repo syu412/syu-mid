@@ -23,7 +23,6 @@
 
           <nav class="nav" aria-label="Main navigation">
             <a class="nav-link" href="index.html">HOME</a>
-            <a class="nav-link" href="index.html#guestbook">MESSAGES</a>
             <a class="nav-link active" data-nav-login href="login.html">LOGIN</a>
             <a class="nav-link" data-nav-register href="register.html">REGISTER</a>
             <button class="nav-link nav-link-button hidden" data-logout-trigger type="button">LOGOUT</button>
@@ -47,7 +46,11 @@
                   class="input"
                   name="username"
                   type="text"
-                  placeholder="Enter your username"
+                  minlength="3"
+                  maxlength="20"
+                  autocomplete="username"
+                  spellcheck="false"
+                  placeholder="3 to 20 characters"
                   required
                 />
               </div>
@@ -59,7 +62,10 @@
                   class="input"
                   name="password"
                   type="password"
-                  placeholder="Enter your password"
+                  minlength="3"
+                  maxlength="20"
+                  autocomplete="current-password"
+                  placeholder="3 to 20 characters"
                   required
                 />
               </div>

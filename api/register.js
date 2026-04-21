@@ -1,10 +1,14 @@
 const { createPasswordSalt, createSession, getSessionUser, hashPassword, setSessionCookie } = require("./_lib/auth");
 const { query } = require("./_lib/db");
-const { methodNotAllowed, readJsonBody, sendJson } = require("./_lib/http");
-
-function isValidAvatar(avatarDataUrl) {
-  return /^data:image\/(png|jpeg);base64,/i.test(avatarDataUrl || "");
-}
+const {
+  MAX_JSON_BODY_BYTES,
+  getPwnedPasswordMatchCount,
+  isSafeUsername,
+  normalizePassword,
+  normalizeUsername,
+  validateAvatarDataUrl,
+} = require("./_lib/security");
+const { methodNotAllowed, readJsonBody, sendError, sendJson } = require("./_lib/http");
 
 module.exports = async (request, response) => {
   if (request.method !== "POST") {
@@ -22,27 +26,40 @@ module.exports = async (request, response) => {
       return;
     }
 
-    const { username, password, avatarDataUrl } = await readJsonBody(request);
-    const normalizedUsername = String(username || "").trim();
-    const normalizedPassword = String(password || "");
+    const { username, password, avatarDataUrl } = await readJsonBody(request, {
+      maxBytes: MAX_JSON_BODY_BYTES,
+    });
+    const normalizedUsername = normalizeUsername(username);
+    const normalizedPassword = normalizePassword(password);
 
     if (normalizedUsername.length < 3 || normalizedUsername.length > 20) {
       sendJson(response, 400, { message: "Username must be between 3 and 20 characters." });
       return;
     }
 
-    if (normalizedPassword.length < 6 || normalizedPassword.length > 64) {
-      sendJson(response, 400, { message: "Password must be between 6 and 64 characters." });
+    if (!isSafeUsername(normalizedUsername)) {
+      sendJson(response, 400, {
+        message: "Username may only contain letters, numbers, dots, underscores, and hyphens.",
+      });
       return;
     }
 
-    if (!isValidAvatar(avatarDataUrl)) {
-      sendJson(response, 400, { message: "Only jpg, jpeg, or png avatars are allowed." });
+    if (normalizedPassword.length < 3 || normalizedPassword.length > 20) {
+      sendJson(response, 400, { message: "Password must be between 3 and 20 characters." });
       return;
     }
 
-    if (avatarDataUrl.length > 2_000_000) {
-      sendJson(response, 400, { message: "Avatar file is too large. Please use a smaller image." });
+    const pwnedPasswordMatchCount = await getPwnedPasswordMatchCount(normalizedPassword);
+    if (pwnedPasswordMatchCount > 0) {
+      sendJson(response, 400, {
+        message: "This password has appeared in known data breaches. Please choose a new password that you have never used before.",
+      });
+      return;
+    }
+
+    const avatarValidation = validateAvatarDataUrl(avatarDataUrl);
+    if (!avatarValidation.ok) {
+      sendJson(response, 400, { message: avatarValidation.message });
       return;
     }
 
@@ -63,7 +80,7 @@ module.exports = async (request, response) => {
         VALUES ($1, $2, $3, $4)
         RETURNING id, username, avatar_data_url AS "avatarDataUrl"
       `,
-      [normalizedUsername, passwordHash, passwordSalt, avatarDataUrl]
+      [normalizedUsername, passwordHash, passwordSalt, avatarValidation.normalizedDataUrl]
     );
 
     const user = createdUser.rows[0];
@@ -76,8 +93,6 @@ module.exports = async (request, response) => {
     });
   } catch (error) {
     console.error(error);
-    sendJson(response, 500, {
-      message: error.message || "Registration failed. Please try again later.",
-    });
+    sendError(response, error, "Registration failed. Please try again later.");
   }
 };
